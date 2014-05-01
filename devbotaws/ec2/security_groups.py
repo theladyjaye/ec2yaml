@@ -1,51 +1,84 @@
 GROUPS = None
 
 
-def get_security_groups(connection):
+def get_security_groups(connection, refresh=False):
     global GROUPS
 
-    if GROUPS is None:
+    if GROUPS is None or refresh:
         GROUPS = connection.get_all_security_groups()
     return GROUPS
 
 
-def get_security_group_names(connection):
-    groups = get_security_groups(connection)
+def get_security_group_names(connection, refresh=False):
+    groups = get_security_groups(connection, refresh)
     return [x.name for x in groups]
 
 
+def delete_security_group(connection, name):
+    return connection.delete_security_group(name)
+
+
 def create_security_group(connection, name, description=None):
-    global GROUPS
 
     g = connection.create_security_group(name, description)
-
-    if GROUPS is None:
-        GROUPS = [g]
-    else:
-        GROUPS.append(g)
+    _add_to_cached_groups(g)
 
     return g
 
 
-def authorize_securitygroup(group_id, ip_protocol, from_port, to_port,
-                            src_group=None, cidr_ip=None):
+def authorize_security_group(group, ip_protocol, from_port, to_port,
+                             src_group=None, cidr_ip=None):
 
-    params = {'Action': 'AuthorizeSecurityGroupIngress'}
-    params['GroupId'] = group_id
-    params['IpPermissions.1.IpProtocol'] = ip_protocol
-    params['IpPermissions.1.FromPort'] = from_port
-    params['IpPermissions.1.ToPort'] = to_port
+    kwargs = {
+        'ip_protocol': ip_protocol,
+        'from_port': from_port,
+        'to_port': to_port,
+    }
+
+    if cidr_ip:
+        kwargs['cidr_ip'] = cidr_ip
 
     if src_group:
-        params['IpPermissions.1.Groups.1.GroupId'] = src_group
-    elif cidr_ip:
-        params['IpPermissions.1.IpRanges.1.CidrIp'] = cidr_ip
+        kwargs['src_group'] = src_group
 
-    location = get_location()
-    result = query(params, location=location, return_root=True)
+    group.authorize(**kwargs)
 
-    if 'error' in result:
-        code = result['error']['Errors']['Error']['Code']
-        if code != 'InvalidGroup.Duplicate':
-            log.error(result)
-            return None
+
+def _add_to_cached_groups(group):
+    global GROUPS
+
+    if GROUPS is None:
+        GROUPS = [group]
+    else:
+        GROUPS.append(group)
+
+
+def create_application_security_group(connection, name, description=None):
+    group = connection.create_security_group(name, description)
+
+    # allow all TCP communication intragroup
+    authorize_security_group(
+        group,
+        ip_protocol='tcp',
+        from_port=1,
+        to_port=65535,
+        src_group=group)
+
+    # allow all icmp communication intragroup
+    authorize_security_group(
+        group,
+        ip_protocol='icmp',
+        from_port=-1,
+        to_port=-1,
+        src_group=group)
+
+    # allow all udp communication intragroup
+    authorize_security_group(
+        group,
+        ip_protocol='udp',
+        from_port=1,
+        to_port=65535,
+        src_group=group)
+
+    return group
+
