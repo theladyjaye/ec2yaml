@@ -11,8 +11,7 @@ from devbotaws.ec2.security_groups import (
 )
 
 
-def initialize_with_conf(path):
-    conf = config.config_with_path(path)
+def initialize_with_conf(conf):
     conn = connection_from_config(conf)
 
     allocate_elastic_ip_with_conf(conn, conf)
@@ -24,3 +23,13 @@ def initialize_with_conf(path):
 
     instances_with_conf(conn, conf)
     assign_ips_with_conf(conf)
+
+
+def initialize_with_string(string):
+    conf = config.config_with_string(string)
+    initialize_with_conf(conf)
+
+
+def initialize_with_path(path):
+    conf = config.config_with_path(path)
+    initialize_with_conf(conf)
