@@ -8,6 +8,7 @@ def load_config(path):
     with open(path) as f:
         data = yaml.load(f.read())
 
+    validate_config(data)
     return data
 
 

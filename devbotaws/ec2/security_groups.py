@@ -82,3 +82,22 @@ def create_application_security_group(connection, name, description=None):
 
     return group
 
+
+def security_groups_with_conf(connection, conf):
+    conf_groups = conf['security_groups']
+    current_groups = set(get_security_group_names(connection))
+    target_groups = set(conf_groups.keys())
+
+    groups_to_create = target_groups.difference(current_groups)
+
+    result = []
+
+    for name in groups_to_create:
+        data = conf_groups[name]
+        description = data.pop('description', None)
+
+        group = create_security_group(connection, name, description)
+        authorize_security_group(group, **data)
+        result.append(group)
+
+    return result

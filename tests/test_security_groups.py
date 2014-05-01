@@ -1,6 +1,7 @@
 import unittest
 from devbotaws.ec2 import utils
 import devbotaws.ec2.security_groups as sg
+from devbotaws.ec2 import config
 
 
 class TestSecurityGroups(unittest.TestCase):
@@ -112,9 +113,18 @@ class TestSecurityGroups(unittest.TestCase):
             else:
                 assertICMP(each)
 
+    def test_security_groups_with_conf(self):
+        conn = self.connection
+        conf = config.load_config('resources/sample.conf')
+        sg.security_groups_with_conf(conn, conf)
 
+        all_groups = sg.get_security_group_names(conn, refresh=True)
 
+        self.assertTrue('foo-ssh' in all_groups)
+        self.assertTrue('foo-salt' in all_groups)
 
+        sg.delete_security_group(conn, 'foo-ssh')
+        sg.delete_security_group(conn, 'foo-salt')
 
 
 

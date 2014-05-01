@@ -5,12 +5,9 @@ from devbotaws.ec2.elastic_ip import allocate_elastic_ip_with_conf
 
 
 def initialize_with_conf(path):
-    # load config
     conf = config.load_config(path)
-    # init connection
-    connection = connection_from_config(conf)
-    # create elastic ip (if applicable)
-    allocate_elastic_ip_with_conf(connection, conf)
+    conn = connection_from_config(conf)
+    allocate_elastic_ip_with_conf(conn, conf)
     # create security groups
     # @adam NEED TO ADD THIS
 
