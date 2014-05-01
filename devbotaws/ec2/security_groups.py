@@ -14,6 +14,19 @@ def get_security_group_names(connection):
     return [x.name for x in groups]
 
 
+def create_security_group(connection, name, description=None):
+    global GROUPS
+
+    g = connection.create_security_group(name, description)
+
+    if GROUPS is None:
+        GROUPS = [g]
+    else:
+        GROUPS.append(g)
+
+    return g
+
+
 def authorize_securitygroup(group_id, ip_protocol, from_port, to_port,
                             src_group=None, cidr_ip=None):
 

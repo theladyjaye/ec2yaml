@@ -24,7 +24,7 @@ def key_for_group(item):
         return item
 
     if isinstance(item, dict):
-        return item.keys[0]
+        return item.keys()[0]
 
 
 def value_for_group(item):
@@ -33,7 +33,7 @@ def value_for_group(item):
         return None
 
     if isinstance(item, dict):
-        return item.values[0]
+        return item.values()[0]
 
 
 def process_group(items):
