@@ -1,7 +1,8 @@
 import unittest
 from devbotaws.ec2 import config
 from devbotaws.ec2.utils import connection
-from devbotaws.ec2.instances import create_instance, terminate_instance
+from devbotaws.ec2.instances import create_instance, terminate_instance,\
+    instances_from_config
 
 
 class TestCreateInstance(unittest.TestCase):
@@ -21,3 +22,8 @@ class TestCreateInstance(unittest.TestCase):
         )
 
         terminate_instance(conn, reservation.instances[0].id)
+
+    # def test_create_instance_from_conf(self):
+    #     conf = config.load_config('resources/no_groups_sample.conf')
+    #     conn = connection()
+    #     instances_from_config(conn, conf)

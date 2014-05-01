@@ -17,3 +17,17 @@ def create_instance(
 
 def terminate_instance(connection, image_id):
     return connection.terminate_instances(image_id)
+
+
+def instances_from_config(connection, conf):
+    for key in conf['instances']:
+        value = conf['instances'][key]
+        reservation = create_instance(
+            connection,
+            value['image'],
+            key_name=value['key_name'],
+            security_groups=value.get('security_groups', None),
+            instance_type=value['size']
+        )
+
+        conf['instances'][key]['instance'] = reservation.instances[0]
