@@ -1,8 +1,17 @@
+GROUPS = None
 
 
 def get_security_groups(connection):
-    rs = connection.get_all_security_groups()
-    return rs
+    global GROUPS
+
+    if GROUPS is None:
+        GROUPS = connection.get_all_security_groups()
+    return GROUPS
+
+
+def get_security_group_names(connection):
+    groups = get_security_groups(connection)
+    return [x.name for x in groups]
 
 
 def authorize_securitygroup(group_id, ip_protocol, from_port, to_port,
