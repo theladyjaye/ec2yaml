@@ -10,6 +10,5 @@ class TestSecurityGroups(unittest.TestCase):
 
     def test_list_groups(self):
         out = sg.get_security_groups(self.connection)
-        import ipdb; ipdb.set_trace()
         pass
 
