@@ -2,6 +2,7 @@
 
 def get_security_groups(connection):
     rs = connection.get_all_security_groups()
+    return rs
 
 
 def authorize_securitygroup(group_id, ip_protocol, from_port, to_port,

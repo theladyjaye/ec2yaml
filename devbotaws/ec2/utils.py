@@ -8,7 +8,7 @@ def connection(location='us-east-1'):
     global __CONNECTION__
 
     if __CONNECTION__ is None:
-        __CONNECTION__ = EC2Connection(region_name=location)
+        __CONNECTION__ = EC2Connection(location)
 
     return __CONNECTION__
 
