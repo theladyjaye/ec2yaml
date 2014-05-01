@@ -81,5 +81,41 @@ class TestSecurityGroups(unittest.TestCase):
         self.assertTrue(perm.to_port == '4000')
         self.assertTrue(perm.grants[0].group_id == target.id)
 
+    def test_create_application_security_group(self):
+        conn = self.connection
+        sg.create_application_security_group(conn, 'foo')
+
+        all_groups = sg.get_security_groups(conn, refresh=True)
+        target = next(x for x in all_groups if x.name == 'foo')
+
+        result = sg.delete_security_group(conn, 'foo')
+        self.assertTrue(result)
+
+        self.assertTrue(len(target.rules) == 3)
+
+        def assertTCP_or_UDP(perm):
+            self.assertTrue(perm.ip_protocol == 'tcp' or perm.ip_protocol == 'udp')
+            self.assertTrue(perm.from_port == '1')
+            self.assertTrue(perm.to_port == '65535')
+            self.assertTrue(perm.grants[0].group_id == target.id)
+
+        def assertICMP(perm):
+            self.assertTrue(perm.ip_protocol == 'icmp')
+            self.assertTrue(perm.from_port == '-1')
+            self.assertTrue(perm.to_port == '-1')
+            self.assertTrue(perm.grants[0].group_id == target.id)
+
+        for each in target.rules:
+            if each.ip_protocol == 'tcp' or each.ip_protocol == 'udp':
+                assertTCP_or_UDP(each)
+
+            else:
+                assertICMP(each)
+
+
+
+
+
+
 
 

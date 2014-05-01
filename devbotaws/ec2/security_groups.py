@@ -80,3 +80,5 @@ def create_application_security_group(connection, name, description=None):
         to_port=65535,
         src_group=group)
 
+    return group
+
