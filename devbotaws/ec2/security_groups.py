@@ -66,6 +66,9 @@ def create_application_security_group(connection, name, description=None):
     global log
     log.info('Initializing application security group \'%s\'', name)
 
+    if name in get_security_group_names(connection):
+        return
+
     group = connection.create_security_group(name, description)
 
     # allow all TCP communication intragroup
