@@ -1,27 +1,26 @@
 from devbotaws.ec2 import config
-from devbotaws.ec2.instances import instances_from_config
+from devbotaws.ec2.instances import instances_with_conf
 from devbotaws.ec2.utils import connection_from_config
-from devbotaws.ec2.elastic_ip import allocate_elastic_ip_with_conf
+
+from devbotaws.ec2.elastic_ip import (
+    allocate_elastic_ip_with_conf, assign_ips_with_conf
+)
+
+from devbotaws.ec2.security_groups import (
+    security_groups_with_conf, create_application_security_group
+)
 
 
 def initialize_with_conf(path):
     conf = config.load_config(path)
     conn = connection_from_config(conf)
+
     allocate_elastic_ip_with_conf(conn, conf)
-    # create security groups
-    # @adam NEED TO ADD THIS
+    security_groups_with_conf(conn, conf)
+    create_application_security_group(conn, conf['app']['name'])
 
-    ##  create instance and apply security groups
-    # this will set the conf['instances']['foo']['instance'] to the instance
-    instances_from_config(connection, conf)
+    for key, value in conf['instances'].iteritems():
+        value['security_groups'].append(conf['app']['name'])
 
-
-
-# - create/apply tags for instance
-# - apply elastic ip to instance
-# - return the addition to a users ~/.ssh/config file:
-#     - ex:
-#         Host cableknit
-#            HostName 54.203.255.168
-#            User ubuntu
-#            IdentityFile ~/.ssh/dpec2.pem
+    instances_with_conf(conn, conf)
+    assign_ips_with_conf(conf)

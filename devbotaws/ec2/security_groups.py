@@ -1,3 +1,7 @@
+import logging
+
+
+log = logging.getLogger(__name__)
 GROUPS = None
 
 
@@ -29,6 +33,8 @@ def create_security_group(connection, name, description=None):
 def authorize_security_group(group, ip_protocol, from_port, to_port,
                              src_group=None, cidr_ip=None):
 
+    global log
+    log.info('Authorizing security group \'%s\'', group.name)
     kwargs = {
         'ip_protocol': ip_protocol,
         'from_port': from_port,
@@ -40,6 +46,9 @@ def authorize_security_group(group, ip_protocol, from_port, to_port,
 
     if src_group:
         kwargs['src_group'] = src_group
+
+    log.debug('Authorizing group \'%s\' with the following: %s',
+              group.name, kwargs)
 
     group.authorize(**kwargs)
 
@@ -54,6 +63,9 @@ def _add_to_cached_groups(group):
 
 
 def create_application_security_group(connection, name, description=None):
+    global log
+    log.info('Initializing application security group \'%s\'', name)
+
     group = connection.create_security_group(name, description)
 
     # allow all TCP communication intragroup
@@ -84,6 +96,8 @@ def create_application_security_group(connection, name, description=None):
 
 
 def security_groups_with_conf(connection, conf):
+    global log
+    log.info('Initializing security groups')
     conf_groups = conf['security_groups']
     current_groups = set(get_security_group_names(connection))
     target_groups = set(conf_groups.keys())
@@ -93,6 +107,7 @@ def security_groups_with_conf(connection, conf):
     result = []
 
     for name in groups_to_create:
+        log.info('Creating security group \'%s\'', name)
         data = conf_groups[name]
         description = data.pop('description', None)
 

@@ -1,3 +1,7 @@
+import logging
+
+
+log = logging.getLogger(__name__)
 
 
 def create_instance(
@@ -19,7 +23,9 @@ def terminate_instance(connection, image_id):
     return connection.terminate_instances(image_id)
 
 
-def instances_from_config(connection, conf):
+def instances_with_conf(connection, conf):
+    global log
+    log.info('Initializing instances')
     for key in conf['instances']:
         value = conf['instances'][key]
         reservation = create_instance(

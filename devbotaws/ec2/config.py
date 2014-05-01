@@ -1,10 +1,15 @@
+import logging
 import yaml
 from .errors import InvalidConfig
 
+log = logging.getLogger(__name__)
+
 
 def load_config(path):
+    global log
     data = None
 
+    log.debug('Loading config at path \'%s\'', path)
     with open(path) as f:
         data = yaml.load(f.read())
 

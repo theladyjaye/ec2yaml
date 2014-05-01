@@ -1,6 +1,8 @@
+import logging
 import boto.ec2
 
 
+log = logging.getLogger(__name__)
 __CONNECTION__ = None
 
 
@@ -8,6 +10,7 @@ def connection(location='us-west-2'):
     global __CONNECTION__
 
     if __CONNECTION__ is None:
+        log.debug('Initializing connection for \'%s\'', location)
         __CONNECTION__ = boto.ec2.connect_to_region(location)
 
     return __CONNECTION__
