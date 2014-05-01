@@ -4,7 +4,7 @@ import boto.ec2
 __CONNECTION__ = None
 
 
-def connection(location='us-east-1'):
+def connection(location='us-west-2'):
     global __CONNECTION__
 
     if __CONNECTION__ is None:
