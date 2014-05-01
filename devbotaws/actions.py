@@ -12,7 +12,7 @@ from devbotaws.ec2.security_groups import (
 
 
 def initialize_with_conf(path):
-    conf = config.load_config(path)
+    conf = config.config_with_path(path)
     conn = connection_from_config(conf)
 
     allocate_elastic_ip_with_conf(conn, conf)

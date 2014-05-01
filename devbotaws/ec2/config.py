@@ -5,13 +5,18 @@ from .errors import InvalidConfig
 log = logging.getLogger(__name__)
 
 
-def load_config(path):
+def config_with_string(data):
+    return yaml.load(data)
+
+
+def config_with_path(path):
     global log
     data = None
 
     log.debug('Loading config at path \'%s\'', path)
+
     with open(path) as f:
-        data = yaml.load(f.read())
+        data = config_with_string(f.read())
 
     validate_config(data)
     return data
@@ -27,4 +32,3 @@ def validate_config(config):
 
     if 'owner' not in config['app'] or config['app']['owner'] is None:
         raise InvalidConfig('\'app\' must contain an \'owner\' value')
-

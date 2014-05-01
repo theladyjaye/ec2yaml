@@ -8,14 +8,14 @@ from devbotaws.ec2 import errors
 class TestConfig(unittest.TestCase):
 
     def test_config_succeeds(self):
-        conf = config.load_config('resources/sample.conf')
+        conf = config.config_with_path('resources/sample.conf')
 
         self.assertTrue(conf['app']['name'] == 'foo')
         self.assertTrue(conf['instances']['app_server'] is not None)
 
     @raises(IOError)
     def test_config_fails_not_found(self):
-        config.load_config('resources/missing')
+        config.config_with_path('resources/missing')
 
     @raises(errors.InvalidConfig)
     def test_config_validation_invalid_app(self):
