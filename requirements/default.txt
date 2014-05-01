@@ -1,2 +1,2 @@
-nose
-boto
+PyYAML==3.11
+boto==2.27.0

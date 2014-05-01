@@ -2,3 +2,41 @@ devbotaws
 ========
 
 
+Take something like this ::
+    app:
+      name: foo
+      owner: adam venturella
+      location: us-west-2
+
+    instances:
+      app_server:
+        key_name: aventurella
+        image: ami-8bcbbfbb
+        size: m3.medium
+
+        ip_address: foo
+
+        security_groups:
+          - ssh
+          - http
+          - https
+          - foo-salt
+          - foo-ssh
+
+    elastic_ips:
+      - foo
+
+    security_groups:
+      foo-ssh:
+        ip_protocol: tcp
+        from_port: 1022
+        to_port: 1022
+        cidr_ip: '0.0.0.0/0'
+
+      foo-salt:
+        ip_protocol: tcp
+        from_port: 2000
+        to_port: 65535
+        cidr_ip: '0.0.0.0/0'
+
+And materialize it into AWS accordingly.
