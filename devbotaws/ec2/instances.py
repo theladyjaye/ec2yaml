@@ -1,5 +1,5 @@
 import logging
-
+import time
 
 log = logging.getLogger(__name__)
 
@@ -25,7 +25,8 @@ def terminate_instance(connection, image_id):
 
 def instances_with_conf(connection, conf):
     global log
-    log.info('Initializing instances')
+    log.info('Initializing instances, this can take a while')
+
     for key in conf['instances']:
         value = conf['instances'][key]
         reservation = create_instance(
@@ -36,4 +37,40 @@ def instances_with_conf(connection, conf):
             instance_type=value['size']
         )
 
-        conf['instances'][key]['instance'] = reservation.instances[0]
+        instance = reservation.instances[0]
+
+        _wait_for_instance(instance)
+
+        conf['instances'][key]['instance'] = instance
+
+        log.info('Instance \'%s: %s\' has become available', instance.id, key)
+        log.info('Instance available at \'%s\'', instance.public_dns_name)
+
+        tag_instance_with_conf(connection, conf, instance)
+
+
+def tag_instance_with_conf(connection, conf, instance):
+    global log
+
+    tags = {
+        'Name': conf['app']['name'],
+        'Owner': conf['app']['owner']
+    }
+
+    log.info('Tagging instance \'%s\'', instance.id)
+    log.debug('%s', tags)
+    connection.create_tags([instance.id], tags)
+
+
+def _wait_for_instance(instance):
+
+    while True:
+        if instance.public_dns_name:
+            break
+
+        try:
+            instance.update()
+        except:
+            pass
+
+        time.sleep(3)
