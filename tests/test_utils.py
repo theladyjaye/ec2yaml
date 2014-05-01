@@ -27,5 +27,11 @@ class TestUtils(unittest.TestCase):
             {'baz': 2}
         ])
 
-        #self.asserttrue
-        #self.assertTrue(value == 'bar')
+        self.assertTrue('foo' in out)
+        self.assertTrue('bar' in out)
+        self.assertTrue('baz' in out)
+
+        self.assertTrue(out['foo'] == 1)
+        self.assertTrue(out['bar'] is None)
+        self.assertTrue(out['baz'] == 2)
+
