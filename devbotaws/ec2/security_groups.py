@@ -53,6 +53,18 @@ def authorize_security_group(group, ip_protocol, from_port, to_port,
     group.authorize(**kwargs)
 
 
+def deauthorize_security_group(group, ip_protocol, from_port, to_port,
+                               src_group=None, cidr_ip=None):
+    group.revoke(
+        ip_protocol=ip_protocol,
+        from_port=from_port,
+        to_port=to_port,
+        src_group=src_group,
+        cidr_ip=cidr_ip)
+
+
+
+
 def _add_to_cached_groups(group):
     global GROUPS
 
