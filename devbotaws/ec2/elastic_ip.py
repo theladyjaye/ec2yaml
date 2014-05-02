@@ -6,6 +6,7 @@ log = logging.getLogger(__name__)
 
 
 def allocate_elastic_ip(connection):
+    log.debug('Allocating elastic IP')
     return connection.allocate_address()
 
 
@@ -46,7 +47,7 @@ def allocate_elastic_ip_with_conf(connection, conf):
     # we will replace the existing conf['elastic_ips']
     # with fully allocated ips if need be.
     data = {}
-    log.info('Allocating elastic IPs')
+    log.info('Initializing elastic IPs')
     for key, value in utils.process_group(conf_data).iteritems():
         if value is None:
             addy = allocate_elastic_ip(connection)
