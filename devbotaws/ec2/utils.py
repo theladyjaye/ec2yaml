@@ -6,19 +6,41 @@ log = logging.getLogger(__name__)
 __CONNECTION__ = None
 
 
-def connection(location='us-west-2'):
+def connection(
+        location='us-west-2',
+        aws_access_key_id=None, aws_secret_access_key=None):
+
     global __CONNECTION__
 
     if __CONNECTION__ is None:
         log.debug('Initializing connection for \'%s\'', location)
-        __CONNECTION__ = boto.ec2.connect_to_region(location)
+        if aws_access_key_id and aws_secret_access_key:
+            log.debug('Using provided \'aws_access_key_id\''
+                      ' and \'aws_secret_access_key\'.'
+                      '\nNot loading from environment variables.\n')
+        else:
+            log.debug('Using provided \'AWS_ACCESS_KEY_ID\''
+                      ' and \'AWS_SECRET_ACCESS_KEY\''
+                      ' environment variables.')
+
+        __CONNECTION__ = boto.ec2.connect_to_region(
+            location,
+            aws_access_key_id=aws_access_key_id,
+            aws_secret_access_key=aws_secret_access_key
+        )
 
     return __CONNECTION__
 
 
 def connection_from_config(conf):
     location = conf['app'].get('location', 'us-east-1')
-    return connection(location=location)
+    key = conf['app'].get('key', None)
+    secret = conf['app'].get('secret', None)
+
+    return connection(
+        location=location,
+        aws_access_key_id=key,
+        aws_secret_access_key=secret)
 
 
 def key_for_group(item):
