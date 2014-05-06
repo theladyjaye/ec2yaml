@@ -34,7 +34,8 @@ def instances_with_conf(connection, conf):
             value['image'],
             key_name=value['key_name'],
             security_groups=value.get('security_groups', None),
-            instance_type=value['size']
+            instance_type=value['size'],
+            placement=value.get('zone', None),
         )
 
         instance = reservation.instances[0]

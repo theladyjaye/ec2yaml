@@ -20,8 +20,15 @@ def assign_ip(instance, ip_address):
 
 def assign_ips_with_conf(conf):
     global log
+
     log.info('Assigning elastic IPs to instances')
-    ips = conf['elastic_ips']
+
+    try:
+        ips = conf['elastic_ips']
+    except KeyError:
+        log.debug('No elastic IPs to assign')
+        return
+
     instances = conf['instances']
 
     is_ip_address = re.compile(
@@ -43,17 +50,18 @@ def assign_ips_with_conf(conf):
 def allocate_elastic_ip_with_conf(connection, conf):
     global log
 
+    log.info('Initializing elastic IPs')
+
     try:
         conf_data = conf['elastic_ips']
     except KeyError:
         log.debug('No elastic IPs to initialize')
         return
 
-
     # we will replace the existing conf['elastic_ips']
     # with fully allocated ips if need be.
     data = {}
-    log.info('Initializing elastic IPs')
+
     for key, value in utils.process_group(conf_data).iteritems():
         if value is None:
             addy = allocate_elastic_ip(connection)
