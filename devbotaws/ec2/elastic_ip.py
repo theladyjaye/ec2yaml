@@ -42,7 +42,13 @@ def assign_ips_with_conf(conf):
 
 def allocate_elastic_ip_with_conf(connection, conf):
     global log
-    conf_data = conf['elastic_ips']
+
+    try:
+        conf_data = conf['elastic_ips']
+    except KeyError:
+        log.debug('No elastic IPs to initialize')
+        return
+
 
     # we will replace the existing conf['elastic_ips']
     # with fully allocated ips if need be.
