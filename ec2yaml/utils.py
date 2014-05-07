@@ -17,7 +17,7 @@ def connection(
         if aws_access_key_id and aws_secret_access_key:
             log.debug('Using provided \'aws_access_key_id\''
                       ' and \'aws_secret_access_key\'.'
-                      '\nNot loading from environment variables.\n')
+                      '\nNot loading from environment variables.')
         else:
             log.debug('Using provided \'AWS_ACCESS_KEY_ID\''
                       ' and \'AWS_SECRET_ACCESS_KEY\''

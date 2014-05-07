@@ -27,9 +27,12 @@ def _init_logging(level):
 def _init_conf(args):
     conf = config.config_with_path(args['<conf>'])
 
-    if '--key' in args and '--secret' in args:
-        conf['app']['key'] = args['--key']
-        conf['app']['secret'] = args['--secret']
+    key = args.get('--key', None)
+    secret = args.get('--secret', None)
+
+    if key and secret in args:
+        conf['app']['key'] = key
+        conf['app']['secret'] = secret
 
     return conf
 
