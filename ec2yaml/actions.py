@@ -25,11 +25,16 @@ def initialize_with_conf(conf):
     create_application_security_group(conn, conf['app']['name'])
 
     for key, value in conf['instances'].iteritems():
-        value['security_groups'].append(conf['app']['name'])
+        if 'security_groups' in value:
+            value['security_groups'].append(conf['app']['name'])
 
     instances_with_conf(conn, conf)
-    assign_ips_with_conf(conf)
-    assign_volumes_with_conf(conf)
+
+    if 'elastic_ips' in conf:
+        assign_ips_with_conf(conf)
+
+    if 'volumes' in conf:
+        assign_volumes_with_conf(conf)
 
 
 def initialize_with_string(string):
