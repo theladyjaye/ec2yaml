@@ -30,7 +30,7 @@ def _init_conf(args):
     key = args.get('--key', None)
     secret = args.get('--secret', None)
 
-    if key and secret in args:
+    if key and secret:
         conf['app']['key'] = key
         conf['app']['secret'] = secret
 
