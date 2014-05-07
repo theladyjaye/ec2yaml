@@ -63,8 +63,6 @@ def deauthorize_security_group(group, ip_protocol, from_port, to_port,
         cidr_ip=cidr_ip)
 
 
-
-
 def _add_to_cached_groups(group):
     global GROUPS
 
@@ -113,7 +111,13 @@ def create_application_security_group(connection, name, description=None):
 def security_groups_with_conf(connection, conf):
     global log
     log.info('Initializing security groups')
-    conf_groups = conf['security_groups']
+
+    try:
+        conf_groups = conf['security_groups']
+    except KeyError:
+        log.debug('No security groups to initialize')
+        return
+
     current_groups = set(get_security_group_names(connection))
     target_groups = set(conf_groups.keys())
 
