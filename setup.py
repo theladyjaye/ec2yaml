@@ -34,6 +34,7 @@ setup(
     long_description=readme + '\n\n' + history,
     author='Adam Venturella <aventurella@gmail.com>, Dino Petrone <dinopetrone@gmail.com>',
     author_email='aventurella@gmail.com',
+    url='https://github.com/aventurella/ec2yaml',
     packages=find_packages(),
     package_dir={'ec2yaml': 'ec2yaml'},
     include_package_data=True,
