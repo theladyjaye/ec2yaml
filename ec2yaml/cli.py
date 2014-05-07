@@ -1,14 +1,17 @@
 '''ec2yaml.
 
 Usage:
-  ec2yaml <conf> [(--key=<key> --secret=<secret>)] [--loglevel=<level>]
+  ec2yaml <conf> [(--key=<key> --secret=<secret>)]\
+  [--boto-profile=<boto-profile>]\
+  [--loglevel=<level>]
 
 Options:
-  -h --help              Show this screen.
-  -v --version           Show version.
-  -k --key=<key>         AWS access key ID
-  -s --secret=<secret>   AWS secret access key
-  -l --loglevel=<level>  Log level to display [default: info]
+  -h --help                           Show this screen.
+  -v --version                        Show version.
+  -k --key=<key>                      AWS access key ID
+  -s --secret=<secret>                AWS secret access key
+  -bp --boto-profile=<boto-profile>   Boto Profile Name
+  -l --loglevel=<level>               Log level to display [default: info]
 '''
 import logging
 from docopt import docopt
@@ -29,10 +32,14 @@ def _init_conf(args):
 
     key = args.get('--key', None)
     secret = args.get('--secret', None)
+    boto_profile = args.get('--boto-profile', None)
 
     if key and secret:
         conf['app']['key'] = key
         conf['app']['secret'] = secret
+
+    if boto_profile:
+        conf['app']['boto_profile'] = boto_profile
 
     return conf
 
