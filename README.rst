@@ -1,19 +1,22 @@
-devbotaws
+ec2yaml
 ========
 
 
-Take something like this ::
+Take a yaml file like this ::
 
     app:
       name: foo
       owner: adam venturella
       location: us-west-2
+      key: <optional>
+      secret: <optional>
 
     instances:
       app_server:
         key_name: aventurella
-        image: ami-8bcbbfbb
+        image: ami-6ac2a85a
         size: m3.medium
+        zone: us-west-2c
 
         ip_address: foo
 
@@ -24,8 +27,16 @@ Take something like this ::
           - foo-salt
           - foo-ssh
 
+        volumes:
+          - foo-volume: /dev/sdh
+
     elastic_ips:
       - foo
+
+    volumes:
+        foo-volume:
+            size: 1
+            zone: us-west-2c
 
     security_groups:
       foo-ssh:
@@ -40,4 +51,5 @@ Take something like this ::
         to_port: 65535
         cidr_ip: '0.0.0.0/0'
 
-And materialize it into AWS accordingly.
+
+And materialize it into AWS EC2 accordingly.
