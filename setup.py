@@ -30,7 +30,7 @@ history = open(os.path.join(here, 'HISTORY.rst')).read().replace('.. :changelog:
 setup(
     name='ec2yaml',
     version=ec2yaml.__version__,
-    description='',
+    description='Materialize a YAML configuration into AWS EC2',
     long_description=readme + '\n\n' + history,
     author='Adam Venturella <aventurella@gmail.com>, Dino Petrone <dinopetrone@gmail.com>',
     author_email='aventurella@gmail.com',
