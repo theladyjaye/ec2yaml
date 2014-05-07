@@ -17,6 +17,9 @@ Take a yaml file like this ::
         image: ami-6ac2a85a
         size: m3.medium
         zone: us-west-2c
+        tags:
+          - key1: value1
+          - key2: value2
 
         ip_address: foo
 
@@ -34,9 +37,13 @@ Take a yaml file like this ::
       - foo
 
     volumes:
-        foo-volume:
-            size: 1
-            zone: us-west-2c
+      foo-volume:
+        size: 1
+        zone: us-west-2c
+        tags:
+          - key1: value1
+          - key2: value2
+
 
     security_groups:
       foo-ssh:
