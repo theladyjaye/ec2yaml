@@ -53,3 +53,17 @@ Take a yaml file like this ::
 
 
 And materialize it into AWS EC2 accordingly.
+
+Command line tool ::
+
+    Usage:
+      ec2yaml <conf> [(--key=<key> --secret=<secret>)] [--loglevel=<level>]
+
+    Options:
+      -h --help              Show this screen.
+      -v --version           Show version.
+      -k --key=<key>         AWS access key ID
+      -s --secret=<secret>   AWS secret access key
+      -l --loglevel=<level>  Log level to display [default: info]
+
+
