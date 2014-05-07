@@ -1,5 +1,6 @@
 import logging
 import time
+from . import utils
 
 log = logging.getLogger(__name__)
 
@@ -27,8 +28,7 @@ def instances_with_conf(connection, conf):
     global log
     log.info('Initializing instances, this can take a while')
 
-    for key in conf['instances']:
-        value = conf['instances'][key]
+    for key, value in conf['instances'].iteritems():
         reservation = create_instance(
             connection,
             value['image'],
@@ -47,16 +47,21 @@ def instances_with_conf(connection, conf):
         log.info('Instance \'%s: %s\' has become available', instance.id, key)
         log.info('Instance available at \'%s\'', instance.public_dns_name)
 
-        tag_instance_with_conf(connection, conf, instance)
+        additional_tags = utils.process_group(value.get('tags', []))
+
+        tag_instance_with_conf(
+            connection, conf, instance, **additional_tags)
 
 
-def tag_instance_with_conf(connection, conf, instance):
+def tag_instance_with_conf(connection, conf, instance, **kwargs):
     global log
 
     tags = {
         'Name': conf['app']['name'],
         'Owner': conf['app']['owner']
     }
+
+    tags.update(kwargs)
 
     log.info('Tagging instance \'%s\'', instance.id)
     log.debug('%s', tags)
