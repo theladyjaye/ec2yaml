@@ -4,7 +4,7 @@
 import os
 import sys
 from setuptools import setup, find_packages
-import devbotaws
+import ec2yaml
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -28,14 +28,14 @@ readme = open(os.path.join(here, 'README.rst')).read()
 history = open(os.path.join(here, 'HISTORY.rst')).read().replace('.. :changelog:', '')
 
 setup(
-    name='devbotaws',
-    version=devbotaws.__version__,
+    name='ec2yaml',
+    version=ec2yaml.__version__,
     description='',
     long_description=readme + '\n\n' + history,
-    author='Adam Venturella <aventurella@gmail.com>',
+    author='Adam Venturella <aventurella@gmail.com>, Dino Petrone <dinopetrone@gmail.com>',
     author_email='aventurella@gmail.com',
     packages=find_packages(),
-    package_dir={'devbotaws': 'devbotaws'},
+    package_dir={'ec2yaml': 'ec2yaml'},
     include_package_data=True,
     install_requires=install_requires,
     extras_require={
@@ -43,7 +43,7 @@ setup(
         'docs': docs_extras,
     },
     tests_require=tests_require,
-    license="BSD",
+    license='BSD',
     zip_safe=False,
     keywords='',
     classifiers=[

@@ -1,17 +1,17 @@
-from devbotaws.ec2 import config
-from devbotaws.ec2.instances import instances_with_conf
-from devbotaws.ec2.utils import connection_from_config
+from . import config
+from .instances import instances_with_conf
+from .utils import connection_from_config
 
-from devbotaws.ec2.elastic_ip import (
+from .elastic_ip import (
     allocate_elastic_ip_with_conf, assign_ips_with_conf
 )
 
-from devbotaws.ec2.volumes import (
+from .volumes import (
     volumes_with_conf, assign_volumes_with_conf
 )
 
 
-from devbotaws.ec2.security_groups import (
+from .security_groups import (
     security_groups_with_conf, create_application_security_group
 )
 
