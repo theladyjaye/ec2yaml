@@ -24,7 +24,9 @@ def volumes_with_conf(connection, conf):
 
         result = create_volume(connection, **kwargs)
         value['volume'] = result
-        tag_volume_with_conf(connection, conf, result)
+
+        additional_tags = utils.process_group(value.get('tags', []))
+        tag_volume_with_conf(connection, conf, result, **additional_tags)
 
 
 def assign_volumes_with_conf(conf):
@@ -88,13 +90,15 @@ def create_volume(
         iops=iops)
 
 
-def tag_volume_with_conf(connection, conf, volume):
+def tag_volume_with_conf(connection, conf, volume, **kwargs):
     global log
 
     tags = {
         'Name': conf['app']['name'],
         'Owner': conf['app']['owner']
     }
+
+    tags.update(kwargs)
 
     log.info('Tagging volume \'%s\'', volume.id)
     log.debug('%s', tags)
