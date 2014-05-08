@@ -48,3 +48,13 @@ Release History
           - key1: value1
           - key2: value2
 
+
+0.0.8 (2014-05-08)
+++++++++++++++++++
+
+**API Changes**
+- A boto profile can now be specified in the command line arguments
+
+**Bugfixes**
+- Fixes an issue with a key and secret from the command line not
+  being properly assigned.
