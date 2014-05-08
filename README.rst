@@ -64,13 +64,16 @@ And materialize it into AWS EC2 accordingly.
 Command line tool ::
 
     Usage:
-      ec2yaml <conf> [(--key=<key> --secret=<secret>)] [--loglevel=<level>]
+    ec2yaml <conf> [(--key=<key> --secret=<secret>)\
+    | --boto-profile=<boto-profile>]\
+    [--loglevel=<level>]
 
     Options:
-      -h --help              Show this screen.
-      -v --version           Show version.
-      -k --key=<key>         AWS access key ID
-      -s --secret=<secret>   AWS secret access key
-      -l --loglevel=<level>  Log level to display [default: info]
+      -h --help                           Show this screen.
+      -v --version                        Show version.
+      -k --key=<key>                      AWS access key ID
+      -s --secret=<secret>                AWS secret access key
+      -bp --boto-profile=<boto-profile>   Boto Profile Name
+      -l --loglevel=<level>               Log level to display [default: info]
 
 
