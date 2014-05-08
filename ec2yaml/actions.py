@@ -41,6 +41,9 @@ def elastic_ips_processor(conn, conf):
 
     assign_ips_with_conf(conf)
 
+    # prevent StopIteration
+    yield
+
 
 @coroutine
 def volumes_processor(conn, conf):
@@ -54,8 +57,10 @@ def volumes_processor(conn, conf):
 
     assign_volumes_with_conf(conf)
 
+    # prevent StopIteration
+    yield
 
-@coroutine
+
 def security_groups_processor(conn, conf):
 
     if 'security_groups' not in conf:
@@ -64,10 +69,7 @@ def security_groups_processor(conn, conf):
     security_groups_with_conf(conn, conf)
     create_application_security_group(conn, conf['app']['name'])
 
-    yield
 
-
-@coroutine
 def instances_processor(conn, conf):
     global log
 
@@ -87,21 +89,22 @@ def instances_processor(conn, conf):
 
     instances_with_conf(conn, conf)
 
-    yield
-
 
 def initialize_with_conf(conf):
     conn = connection_from_config(conf)
     elastic_ips = elastic_ips_processor(conn, conf)
     volumes = volumes_processor(conn, conf)
-    security_groups = security_groups_processor(conn, conf)
-    instances = instances_processor(conn, conf)
+    security_groups_processor(conn, conf)
+    instances_processor(conn, conf)
+
+    # semantic var
+    _next = None
 
     if 'elastic_ips' in conf and 'instances' in conf:
-        elastic_ips.send(None)
+        elastic_ips.send(_next)
 
     if 'volumes' in conf and 'instances' in conf:
-        volumes.send(None)
+        volumes.send(_next)
 
 
 def initialize_with_string(string):
